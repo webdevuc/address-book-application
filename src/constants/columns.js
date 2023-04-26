@@ -1,49 +1,44 @@
 export const columns = [
-  { id: "companyName", label: "CompanyName", width: 10 },
-  { id: "customerID", label: "CustomerID", minWidth: 20 },
+  { id: "CompanyName", label: "CompanyName", width: 10 },
+  { id: "CustomerID", label: "CustomerID", minWidth: 20 },
   {
-    id: "contactName",
+    id: "ContactName",
     label: "ContactName",
     minWidth: 50,
   },
   {
-    id: "email",
+    id: "Email",
     label: "Email",
     minWidth: 50,
   },
   {
-    id: "address",
+    id: "Address",
     label: "Address",
     minWidth: 50,
   },
   {
-    id: "phone",
+    id: "Phone",
     label: "Phone",
     minWidth: 50,
   },
   {
-    id: "postalCode",
+    id: "PostalCode",
     label: "PostalCode",
     minWidth: 50,
   },
   {
-    id: "country",
+    id: "Country",
     label: "Country",
     minWidth: 60,
   },
   {
-    id: "contactTitle",
+    id: "ContactTitle",
     label: "ContactTitle",
     minWidth: 60,
   },
 
   {
-    id: "address",
-    label: "Address",
-    minWidth: 60,
-  },
-  {
-    id: "fax",
+    id: "Fax",
     label: "Fax",
     minWidth: 60,
     format: (value) => value.toFixed(2),

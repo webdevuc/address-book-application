@@ -6,11 +6,13 @@ import {
   filterReducer,
   searchReducer,
 } from "./reducers/filterReducer";
+import { getAddressReducer } from "./reducers/addressReducer";
 
 const reducer = combineReducers({
   search: searchReducer,
   filter: filterReducer,
   isOpen: drawerReducer,
+  addressList: getAddressReducer,
 });
 
 let initialState = {};

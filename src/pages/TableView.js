@@ -6,35 +6,40 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import addressData from "../seed/data.json";
 import { Box } from "@mui/material";
-import { useSelector } from "react-redux";
-import { columns } from "./Data/columns";
-import { useState } from "react";
-
-let rows = [];
-addressData &&
-  addressData.AddressBook.Contact.forEach((item, index) => {
-    rows.push({
-      customerID: item.CustomerID,
-      companyName: item.CompanyName,
-      contactName: item.ContactName,
-      contactTitle: item.ContactTitle,
-      address: item.Address,
-      email: item.Email,
-      postalCode: item.PostalCode,
-      country: item.Country,
-      phone: item.Phone,
-      fax: item.Fax,
-    });
-  });
+import CircularProgress from "@mui/material/CircularProgress";
+import { useDispatch, useSelector } from "react-redux";
+import { columns } from "../constants/columns";
+import { useEffect, useState } from "react";
+import { filterResult } from "../components/SortFilter";
+import { getAddressList } from "../redux/actions/addressAction";
 
 export default function TableView() {
+  const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.isOpen.isOpen);
   const searchQuery = useSelector((state) => state.search.search);
   const sortData = useSelector((state) => state.filter.filterText);
+  const data = useSelector((state) => state?.addressList?.data?.Contact);
+  const isLoading = useSelector((state) => state?.addressList.loading);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  let rows = [];
+  data &&
+    data.forEach((item, index) => {
+      rows.push({
+        customerID: item.CustomerID,
+        companyName: item.CompanyName,
+        contactName: item.ContactName,
+        contactTitle: item.ContactTitle,
+        address: item.Address,
+        email: item.Email,
+        postalCode: item.PostalCode,
+        country: item.Country,
+        phone: item.Phone,
+        fax: item.Fax,
+      });
+    });
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage);
@@ -44,26 +49,11 @@ export default function TableView() {
     setPage(0);
   };
 
-  const filteredRows = rows
-    .filter((row) => {
-      if (searchQuery === "") {
-        return true;
-      } else {
-        return (
-          row.customerID?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          row.customerID?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          row.country?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          row.companyName?.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      }
-    })
-    .sort((a, b) => {
-      if (sortData === "ASC") {
-        return a.customerID.localeCompare(b.customerID);
-      } else {
-        return b.customerID.localeCompare(a.customerID);
-      }
-    });
+  useEffect(() => {
+    dispatch(getAddressList());
+  }, [dispatch, searchQuery, sortData]);
+
+  const filteredRows = filterResult(data, searchQuery, sortData);
 
   return (
     <Box
@@ -73,6 +63,11 @@ export default function TableView() {
         marginTop: "2rem",
       }}
     >
+      {isLoading && (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress color="primary" />
+        </Box>
+      )}
       <Box component="main" sx={{ flexGrow: 1, pl: 7, pr: 3, pt: 7 }}>
         <Paper sx={{ flexGrow: 1, p: 3, boxShadow: 0 }}>
           <TableContainer>
@@ -95,7 +90,7 @@ export default function TableView() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredRows.length ? (
+                {filteredRows?.length ? (
                   filteredRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
@@ -129,11 +124,11 @@ export default function TableView() {
               </TableBody>
             </Table>
           </TableContainer>
-          {filteredRows.length > 1 && (
+          {filteredRows?.length > 1 && (
             <TablePagination
               rowsPerPageOptions={[10, 20, 100]}
               component="div"
-              count={rows.length}
+              count={rows?.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

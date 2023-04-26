@@ -17,7 +17,7 @@ const CardList = ({ item }) => {
   } = item;
 
   return (
-    <Card sx={{ width: 320, boxShadow: 0 }}>
+    <Card sx={{ width: 320, boxShadow: 0, fontSize: 14 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} gutterBottom>
           CustomerID : {CustomerID}

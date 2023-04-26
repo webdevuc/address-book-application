@@ -1,7 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import TableView from "./components/TableView";
-import Cards from "./components/Cards";
+import Sidebar from "./pages/Sidebar";
+import TableView from "./pages/TableView";
+import Cards from "./pages/Cards";
 
 const App = () => {
   return (
